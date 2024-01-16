@@ -6,11 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        *{
+        * {
             margin: 0;
             padding: 0;
         }
-        .btn{
+
+        .btn {
             font-size: 56px;
             text-align: center;
             height: 200px;
@@ -20,35 +21,91 @@
 
         .btn2 {
             display: inline-block;
-            padding: 10px 20px; /* 设置内边距 */
+            padding: 10px 20px;
+            /* 设置内边距 */
             font-size: 16px;
             font-weight: bold;
             color: white;
-            background-color: #409EFF; /* 设置背景色 */
-            border: none; /* 去除边框 */
-            border-radius: 5px; /* 设置圆角 */
-            cursor: pointer; /* 鼠标指针变为手型 */
-            text-align: center; /* 文本居中对齐 */
-            text-decoration: none; /* 去除下划线 */
-            transition: background-color 0.3s ease; /* 添加过渡效果 */
+            background-color: #409EFF;
+            /* 设置背景色 */
+            border: none;
+            /* 去除边框 */
+            border-radius: 5px;
+            /* 设置圆角 */
+            cursor: pointer;
+            /* 鼠标指针变为手型 */
+            text-align: center;
+            /* 文本居中对齐 */
+            text-decoration: none;
+            /* 去除下划线 */
+            transition: background-color 0.3s ease;
+            /* 添加过渡效果 */
             margin-left: 50%;
             transform: translate(-50%);
         }
 
         .btn2:hover {
-            background-color: #2979ff; /* 鼠标悬停时改变背景色 */
+            background-color: #2979ff;
+            /* 鼠标悬停时改变背景色 */
         }
     </style>
 </head>
 
 <body>
-    <div class="btn">今天吃什么</div>
-    <div class="btn2">点击</div>
+    <div class="btn" id="displayArea">今天吃什么</div>
+    <div class="btn2" id="myButton">点击</div>
     <script src="./jquery.js"></script>
     <script>
-        let res = null;
-        function ajaxfn() {
-            $.ajax({
+        // 获取当前日期（格式化为YYYY-MM-DD）
+        function getCurrentDate() {
+            const today = new Date();
+            const dd = String(today.getDate()).padStart(2, '0');
+            const mm = String(today.getMonth() + 1).padStart(2, '0'); // 月份是从0开始的
+            const yyyy = today.getFullYear();
+            return yyyy + '-' + mm + '-' + dd;
+        }
+
+        // 检查并设置用户当天是否已点击过及对应的数据
+        function checkAndSetClickStatus(data) {
+            const today = getCurrentDate();
+            let clickData = localStorage.getItem('clickData');
+
+            if (!clickData) {
+                localStorage.setItem('clickData', JSON.stringify({ date: today, result: data }));
+                return true; // 用户今天首次点击，保存数据
+            } else {
+                const parsedData = JSON.parse(clickData);
+                if (parsedData.date === today) {
+                    return false; // 用户今天已经点击过
+                } else { // 昨天及以前点击过，判断是否是新的一天
+                    const yesterday = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+                    yesterday.setHours(0, 0, 0, 0);
+                    const yesterdayStr = `${yesterday.getFullYear()}-${yesterday.getMonth() + 1}-${yesterday.getDate()}`;
+                    if (parsedData.date !== yesterdayStr) {
+                        localStorage.setItem('clickData', JSON.stringify({ date: today, result: data }));
+                        return true; // 新的一天，允许点击并保存数据
+                    }
+                    return false; // 同一天内重复点击
+                }
+            }
+        }
+
+        // 假设这是你的按钮元素
+        const myButton = document.getElementById("myButton");
+        const displayArea = document.getElementById("displayArea"); // 假设有一个用于显示结果的DOM元素
+
+        // 给按钮添加点击事件监听器
+        myButton.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            // 假设data是我们从点击操作获取的数据
+            let data = "今天吃什么";
+
+            // 检查点击状态
+            if (checkAndSetClickStatus(data)) {
+                console.log("点击有效，执行相应操作...");
+                // 在此处添加你希望在每天首次点击时执行的操作
+                $.ajax({
                 "url": "https://eolink.o.apispace.com/eat222/api/v1/forward/chishenme?size=1",
                 "method": "GET",
                 "headers": {
@@ -58,14 +115,28 @@
                 "crossDomain": true,
                 success: function (data) {
                     // res = data.data;
-                    $('.btn').replaceWith(`<div class="btn">推荐吃：${data.data}</div>`)
+                    // $('.btn').replaceWith(`<div class="btn">推荐吃：${data.data}</div>`)
+                    displayArea.textContent = data.data; // 将数据展示在页面上
+                    localStorage.setItem('data', data.data);
                 }
             })
-        }
+            } else {
+                alert("今天已经点击过了，不能再点击！");
+                this.disabled = true;
+            }
+        });
 
-        $('.btn2').click(() => {
-            ajaxfn();
-        })
+        // 页面加载时，检查并显示今天的点击数据
+        window.onload = function () {
+            const clickDataStr = localStorage.getItem('clickData');
+            if (clickDataStr) {
+                const clickData = JSON.parse(clickDataStr);
+                if (clickData.date === getCurrentDate()) {
+                    let data = localStorage.getItem('data');
+                    displayArea.textContent = data;
+                }
+            }
+        };
     </script>
 </body>
 
