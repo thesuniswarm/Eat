@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .btn{
+            font-size: 56px;
+            text-align: center;
+            height: 200px;
+            height: 200px;
+            margin: 200px auto;
+        }
+
+        .btn2 {
+            display: inline-block;
+            padding: 10px 20px; /* 设置内边距 */
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background-color: #409EFF; /* 设置背景色 */
+            border: none; /* 去除边框 */
+            border-radius: 5px; /* 设置圆角 */
+            cursor: pointer; /* 鼠标指针变为手型 */
+            text-align: center; /* 文本居中对齐 */
+            text-decoration: none; /* 去除下划线 */
+            transition: background-color 0.3s ease; /* 添加过渡效果 */
+            margin-left: 50%;
+            transform: translate(-50%);
+        }
+
+        .btn2:hover {
+            background-color: #2979ff; /* 鼠标悬停时改变背景色 */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="btn">今天吃什么</div>
+    <div class="btn2">点击</div>
+    <script src="./jquery.js"></script>
+    <script>
+        let res = null;
+        function ajaxfn() {
+            $.ajax({
+                "url": "https://eolink.o.apispace.com/eat222/api/v1/forward/chishenme?size=1",
+                "method": "GET",
+                "headers": {
+                    "X-APISpace-Token": "ormwy4euseghlxng4nhtzlbcnx263yc4"
+                },
+                // "data": data,
+                "crossDomain": true,
+                success: function (data) {
+                    // res = data.data;
+                    $('.btn').replaceWith(`<div class="btn">推荐吃：${data.data}</div>`)
+                }
+            })
+        }
+
+        $('.btn2').click(() => {
+            ajaxfn();
+        })
+    </script>
+</body>
+
+</html>
