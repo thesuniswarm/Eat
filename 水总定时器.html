@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>定时器</title>
+</head>
+
+<body>
+    <div id="countdown2">正在加载倒计时...</div>
+    <div id="countdown">正在加载倒计时...</div>
+    <script>
+        function countdown2() {
+            // 获取当前时间
+            const now = new Date();
+            // 计算今天18点30分的时间戳
+            const alarmTimeToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 30, 0).getTime();
+            // 计算距离今天18点30分的剩余毫秒数
+            let remainingMs = alarmTimeToday - now.getTime();
+
+            // 如果已经过了今天的18点30分，则设置为明天的18点30分
+            if (remainingMs <= 0) {
+                remainingMs += 24 * 60 * 60 * 1000; // 增加一天的毫秒数
+                document.getElementById('countdown2').innerText = `距离水总明天下班还有`;
+            } else {
+                document.getElementById('countdown2').innerText = `距离水总今天下班还有`;
+            }
+
+            // 计算剩余的小时、分钟和秒数
+            const hours = Math.floor(remainingMs / (1000 * 60 * 60));
+            remainingMs %= (1000 * 60 * 60);
+            const minutes = Math.floor(remainingMs / (1000 * 60));
+            remainingMs %= (1000 * 60);
+            const seconds = Math.floor(remainingMs / 1000);
+
+            // 更新完整的倒计时信息
+            document.getElementById('countdown2').innerText += ` ${hours}小时 ${minutes}分钟 ${seconds}秒`;
+
+            // 每秒更新一次倒计时
+            setTimeout(countdown2, 1000);
+        }
+
+        // 页面加载后开始倒计时
+        countdown2();
+
+        function countdown() {
+            // 获取当前时间
+            const now = new Date();
+            // 计算今天中午12点的时间戳
+            const noonToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12, 0, 0).getTime();
+            // 计算距离今天中午12点的剩余毫秒数
+            let remainingMs = noonToday - now.getTime();
+
+            // 如果已经过了今天的中午12点
+            if (remainingMs <= 0) {
+                // 设置为明天的中午12点，并更新文案提示
+                remainingMs += 24 * 60 * 60 * 1000;
+                document.getElementById('countdown').innerText = `距离水总明天午休还有`;
+            } else {
+                document.getElementById('countdown').innerText = `距离水总今天午休还有`;
+            }
+
+            // 计算剩余的小时、分钟和秒数
+            const hours = Math.floor(remainingMs / (1000 * 60 * 60));
+            remainingMs %= (1000 * 60 * 60);
+            const minutes = Math.floor(remainingMs / (1000 * 60));
+            remainingMs %= (1000 * 60);
+            const seconds = Math.floor(remainingMs / 1000);
+
+            // 更新完整的倒计时信息
+            document.getElementById('countdown').innerText += ` ${hours}小时 ${minutes}分钟 ${seconds}秒`;
+
+            // 每秒更新一次倒计时
+            setTimeout(countdown, 1000);
+        }
+
+        // 页面加载后开始倒计时
+        countdown();
+    </script>
+</body>
+
+</html>
