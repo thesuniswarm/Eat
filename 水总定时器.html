@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>定时器</title>
+    <title>打工人</title>
 </head>
 
 <body>
@@ -22,9 +22,9 @@
             // 如果已经过了今天的18点30分，则设置为明天的18点30分
             if (remainingMs <= 0) {
                 remainingMs += 24 * 60 * 60 * 1000; // 增加一天的毫秒数
-                document.getElementById('countdown2').innerText = `距离水总明天下班还有`;
+                document.getElementById('countdown2').innerText = `距离大帅哥明天下班还有`;
             } else {
-                document.getElementById('countdown2').innerText = `距离水总今天下班还有`;
+                document.getElementById('countdown2').innerText = `距离大帅哥今天下班还有`;
             }
 
             // 计算剩余的小时、分钟和秒数
@@ -56,9 +56,9 @@
             if (remainingMs <= 0) {
                 // 设置为明天的中午12点，并更新文案提示
                 remainingMs += 24 * 60 * 60 * 1000;
-                document.getElementById('countdown').innerText = `距离水总明天午休还有`;
+                document.getElementById('countdown').innerText = `距离大帅哥明天午休还有`;
             } else {
-                document.getElementById('countdown').innerText = `距离水总今天午休还有`;
+                document.getElementById('countdown').innerText = `距离大帅哥今天午休还有`;
             }
 
             // 计算剩余的小时、分钟和秒数
