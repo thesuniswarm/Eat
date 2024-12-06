@@ -74,9 +74,18 @@
         ];
 
         function showFood() {
-            const randomIndex = Math.floor(Math.random() * foodArray.length);
-            const foodItem = foodArray[randomIndex];
-            document.getElementById('foodDisplay').innerText = `推荐食物: ${foodItem}`;
+            // 随机生成推荐的食物数量，范围是 1 到 5
+            const foodCount = Math.floor(Math.random() * 5) + 1;
+            const foodItems = [];
+
+            // 获取多个随机食物
+            for (let i = 0; i < foodCount; i++) {
+                const randomIndex = Math.floor(Math.random() * foodArray.length);
+                foodItems.push(foodArray[randomIndex]);
+            }
+
+            // 显示推荐的食物列表
+            document.getElementById('foodDisplay').innerText = `推荐食物: ${foodItems.join(', ')}`;
         }
     </script>
 </body>
