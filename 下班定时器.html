@@ -1,83 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>打工人</title>
+    <title>倒计时</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #3a1c71, #d76d77, #ffaf7b);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+        }
+
+        .container {
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .countdown-display {
+            margin-top: 30px;
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        .countdown-finished {
+            color: #fffa65;
+        }
+
+        /* 新增样式 */
+        #countdown2, #countdown {
+            margin-top: 20px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #fff;
+        }
+    </style>
 </head>
-
 <body>
-    <div id="countdown2">正在加载倒计时...</div>
-    <div id="countdown">正在加载倒计时...</div>
+    <div class="container">
+        <h1>倒计时</h1>
+        <div id="countdown2" class="countdown-display">正在加载倒计时...</div>
+        <div id="countdown" class="countdown-display">正在加载倒计时...</div>
+    </div>
     <script>
-        function countdown2() {
-            // 获取当前时间
+        function updateCountdown(elementId, targetHour, targetMinute) {
+            const element = document.getElementById(elementId);
             const now = new Date();
-            // 计算今天18点30分的时间戳
-            const alarmTimeToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 00, 0).getTime();
-            // 计算距离今天18点30分的剩余毫秒数
-            let remainingMs = alarmTimeToday - now.getTime();
+            const targetTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), targetHour, targetMinute, 0).getTime();
+            let remainingMs = targetTime - now.getTime();
 
-            // 如果已经过了今天的18点30分，则设置为明天的18点30分
             if (remainingMs <= 0) {
-                remainingMs += 24 * 60 * 60 * 1000; // 增加一天的毫秒数
-                document.getElementById('countdown2').innerText = `距离大帅哥明天下班还有`;
-            } else {
-                document.getElementById('countdown2').innerText = `距离大帅哥今天下班还有`;
-            }
-
-            // 计算剩余的小时、分钟和秒数
-            const hours = Math.floor(remainingMs / (1000 * 60 * 60));
-            remainingMs %= (1000 * 60 * 60);
-            const minutes = Math.floor(remainingMs / (1000 * 60));
-            remainingMs %= (1000 * 60);
-            const seconds = Math.floor(remainingMs / 1000);
-
-            // 更新完整的倒计时信息
-            document.getElementById('countdown2').innerText += ` ${hours}小时 ${minutes}分钟 ${seconds}秒`;
-
-            // 每秒更新一次倒计时
-            setTimeout(countdown2, 1000);
-        }
-
-        // 页面加载后开始倒计时
-        countdown2();
-
-        function countdown() {
-            // 获取当前时间
-            const now = new Date();
-            // 计算今天中午12点的时间戳
-            const noonToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12, 0, 0).getTime();
-            // 计算距离今天中午12点的剩余毫秒数
-            let remainingMs = noonToday - now.getTime();
-
-            // 如果已经过了今天的中午12点
-            if (remainingMs <= 0) {
-                // 设置为明天的中午12点，并更新文案提示
                 remainingMs += 24 * 60 * 60 * 1000;
-                document.getElementById('countdown').innerText = `距离大帅哥明天午休还有`;
+                element.innerText = `距离大帅哥明天下班还有`;
             } else {
-                document.getElementById('countdown').innerText = `距离大帅哥今天午休还有`;
+                element.innerText = `距离大帅哥今天下班还有`;
             }
 
-            // 计算剩余的小时、分钟和秒数
             const hours = Math.floor(remainingMs / (1000 * 60 * 60));
             remainingMs %= (1000 * 60 * 60);
             const minutes = Math.floor(remainingMs / (1000 * 60));
             remainingMs %= (1000 * 60);
             const seconds = Math.floor(remainingMs / 1000);
 
-            // 更新完整的倒计时信息
-            document.getElementById('countdown').innerText += ` ${hours}小时 ${minutes}分钟 ${seconds}秒`;
+            element.innerText += ` ${hours}小时 ${minutes}分钟 ${seconds}秒`;
 
-            // 每秒更新一次倒计时
-            setTimeout(countdown, 1000);
+            setTimeout(() => updateCountdown(elementId, targetHour, targetMinute), 1000);
         }
 
         // 页面加载后开始倒计时
-        countdown();
+        updateCountdown('countdown2', 18, 30);
+        updateCountdown('countdown', 12, 0);
     </script>
 </body>
-
 </html>
