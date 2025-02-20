@@ -61,31 +61,32 @@
     </div>
     <script>
         function updateCountdown(elementId, targetHour, targetMinute) {
-            const element = document.getElementById(elementId);
-            const now = new Date();
-            const targetTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), targetHour, targetMinute, 0).getTime();
-            let remainingMs = targetTime - now.getTime();
+    const element = document.getElementById(elementId);
+    const now = new Date();
+    const targetTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), targetHour, targetMinute, 0).getTime();
+    let remainingMs = targetTime - now.getTime();
 
-            if (remainingMs <= 0) {
-                remainingMs += 24 * 60 * 60 * 1000;
-                element.innerText = `距离大帅哥明天下班还有`;
-            } else {
-                element.innerText = `距离大帅哥今天下班还有`;
-            }
+    if (remainingMs <= 0) {
+        element.classList.add('hidden');
+        element.innerText = elementId === 'countdown2' ? `大帅哥已经下班` : `已经午休`;
+    } else {
+        element.classList.remove('hidden');
+        element.innerText = elementId === 'countdown2' ? `距离大帅哥今天下班还有` : `距离大帅哥今天午休还有`;
 
-            const hours = Math.floor(remainingMs / (1000 * 60 * 60));
-            remainingMs %= (1000 * 60 * 60);
-            const minutes = Math.floor(remainingMs / (1000 * 60));
-            remainingMs %= (1000 * 60);
-            const seconds = Math.floor(remainingMs / 1000);
+        const hours = Math.floor(remainingMs / (1000 * 60 * 60));
+        remainingMs %= (1000 * 60 * 60);
+        const minutes = Math.floor(remainingMs / (1000 * 60));
+        remainingMs %= (1000 * 60);
+        const seconds = Math.floor(remainingMs / 1000);
 
-            element.innerText += ` ${hours}小时 ${minutes}分钟 ${seconds}秒`;
+        element.innerText += ` ${hours}小时 ${minutes}分钟 ${seconds}秒`;
+    }
 
-            setTimeout(() => updateCountdown(elementId, targetHour, targetMinute), 1000);
-        }
+    setTimeout(() => updateCountdown(elementId, targetHour, targetMinute), 1000);
+}
 
         // 页面加载后开始倒计时
-        updateCountdown('countdown2', 18, 30);
+        updateCountdown('countdown2', 21, 30);
         updateCountdown('countdown', 12, 0);
     </script>
 </body>
